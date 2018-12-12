@@ -29,8 +29,15 @@ class Fusee:
         self.vy = 0
         self.largeur = 0
         self.angle = 0 # de 0 à 360 degré
-    def collide(ligne) # retourne booléen, paramètre ligne
+        self.forceReacteur = 20 
+    def collide(self, ligne): # retourne booléen, paramètre ligne
         pass
+    def tourner(self, angle):
+        pass
+    def update(self):
+        self.x = self.x + self.vx
+        self.y = self.y + self.vy
+    def Activerpropulser():
 
 
 class Niveau:
@@ -45,7 +52,8 @@ class Ligne:
         self.gagnant = 0 # 0 = dangereux, 1 = gagnant
     def intersection(ligne): # retourne booléen, paramètre ligne
         pass
-    def setGagnant(self, v)
+    def setGagnant(self, v):
+        pass
 
 
 
