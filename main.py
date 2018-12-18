@@ -5,6 +5,7 @@ class GameConfig:
     windowH = 500
     black = (0,0,0)
     white = (255,255,255)
+    imgFusee = 
 class GameState:
     def __init__(self):
         self.fusee = Fusee()
@@ -42,6 +43,8 @@ class Fusee:
         self.y = self.y + self.vy
     def propulser():
         pass
+    def draw(window):
+
 
 
 class Niveau:
@@ -59,7 +62,10 @@ class Ligne:
         self.bx = bx
         self.by = by
         self.gagnant = 0 # 0 = dangereux, 1 = gagnant
-    def intersection(ligne): # retourne booléen, paramètre ligne
+    def intersection(self, ligne): # retourne booléen, paramètre ligne
+        x = 0 # coordonnée de l'intersection de deux droites
+        y = 0 # coordonnées y de l'intersection des deux droites
+    def pointSurDroite(x, y):
         pass
     def setGagnant(self, v):
         self.gagant = v
