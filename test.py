@@ -1,5 +1,6 @@
 import main
 import pygame
+import math
 
 line = main.Ligne(-1, -1, 2, 2)
 
