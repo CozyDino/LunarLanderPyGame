@@ -28,14 +28,22 @@ def main():
 class Fusee:
     def __init__(self):
         self.x = 0 # nombre à déterminer
-        self.y = 0 
+        self.y = 0
         self.vx = 0
         self.vy = 0
         self.largeur = 0
         self.angle = 0 # de 0 à 360 degré
-        self.forceReacteur = 20 
+        self.forceReacteur = 20
     def collide(self, ligne): # retourne booléen, paramètre ligne
-        pass
+        lineH = new Ligne(self.x, self.y, self.x+self.largeur, self.y)
+        lineB = new Ligne(self.x, self.y-self.largeur, self.x+self.largeur, self.y-self.largeur)
+        lineG = new Ligne(self.x, self.y, self.x, self.y-self.largeur)
+        lineD = new Ligne(self.x+self.largeur, self.y, self.x+self.largeur, self.y-self.largeur)
+        if ((lineH.intersection(ligne) == True) or (lineB.intersection(ligne) == True)
+        or (lineG.intersection(ligne) == True) or (lineD.intersection(ligne) == True)):
+            return True
+        else:
+            return False
     def tourner(self, angle):
         pass
     def update(self):
@@ -51,10 +59,10 @@ class Fusee:
 class Niveau:
     def __init__(self):
         listeLigne = []
-        # liste.append(valeur) # permet d'ajouter une valeur à la liste, 
+        # liste.append(valeur) # permet d'ajouter une valeur à la liste,
     def collide(fusee): # boolean
         pass
-    
+
 
 class Ligne:
     def __init__(self, ax, ay, bx, by):
