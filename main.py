@@ -8,10 +8,12 @@ class GameConfig:
 class GameState:
     def __init__(self):
         self.fusee = Fusee()
+        niveau = Niveau()
     def advanceState(self):
-        pass
+        fusee.update()
     def draw(self, window):
         window.fill(GameConfig.black)
+
 
 def main():
     pygame.init()
@@ -38,7 +40,7 @@ class Fusee:
     def update(self):
         self.x = self.x + self.vx
         self.y = self.y + self.vy
-    def Activerpropulser():
+    def propulser():
         pass
 
 
