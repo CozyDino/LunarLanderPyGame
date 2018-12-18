@@ -4,6 +4,7 @@ class GameConfig:
     windowW = 800
     windowH = 500
     black = (0,0,0)
+    white = (255,255,255)
 class GameState:
     def __init__(self):
         self.fusee = Fusee()
@@ -15,9 +16,9 @@ class GameState:
 def main():
     pygame.init()
     window = pygame.display.set_mode((GameConfig.windowW, GameConfig.windowH))
-    gameState = GameState()
+    horloge = pygame.time.Clock()
     pygame.display.set_caption("Lunar_Lander")
-    gameLoop()
+    gameLoop(window, horloge)
     pygame.quit()
     quit()
 
@@ -38,10 +39,16 @@ class Fusee:
         self.x = self.x + self.vx
         self.y = self.y + self.vy
     def Activerpropulser():
+        pass
 
 
 class Niveau:
-
+    def __init__(self):
+        listeLigne = []
+        # liste.append(valeur) # permet d'ajouter une valeur à la liste, 
+    def collide(fusee): # boolean
+        pass
+    
 
 class Ligne:
     def __init__(self, ax, ay, bx, by):
@@ -53,17 +60,21 @@ class Ligne:
     def intersection(ligne): # retourne booléen, paramètre ligne
         pass
     def setGagnant(self, v):
-        pass
+        self.gagant = v
+    def draw(window):
+	    window.draw.line(window,GameConfig.white, (ax,ay), (bx, by),1)
 
 
 
-
-
-def gameLoop():
+def gameLoop(window, horloge):
     game_over = False
+    gameState = GameState()
     while not game_over:
+        gameState.advanceState()
+        horloge.tick(100)
+        gameState.draw(window)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
-    
+        pygame.display.update()
 main()
