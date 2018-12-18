@@ -5,13 +5,13 @@ class GameConfig:
     windowH = 500
     black = (0,0,0)
     white = (255,255,255)
-    imgFusee = 
+    imgFusee = pygame.image.load('rocketsprite.png')
 class GameState:
     def __init__(self):
         self.fusee = Fusee()
-        niveau = Niveau()
+        self.niveau = Niveau()
     def advanceState(self):
-        fusee.update()
+        self.fusee.update()
     def draw(self, window):
         window.fill(GameConfig.black)
 
@@ -44,6 +44,7 @@ class Fusee:
     def propulser():
         pass
     def draw(window):
+        pass
 
 
 
@@ -65,8 +66,8 @@ class Ligne:
     def intersection(self, ligne): # retourne booléen, paramètre ligne
         x = 0 # coordonnée de l'intersection de deux droites
         y = 0 # coordonnées y de l'intersection des deux droites
-    def pointSurDroite(x, y):
-        pass
+    def pointSurSegment(self, x, y):
+        return ((y - self.ay)*(self.bx - self.ax) == (self.by - self.ay)*(x-self.ax)) and (x >= self.ax and x <= self.bx) and (y >= self.ay, y <= self.by)
     def setGagnant(self, v):
         self.gagant = v
     def draw(window):
@@ -85,4 +86,4 @@ def gameLoop(window, horloge):
             if event.type == pygame.QUIT:
                 game_over = True
         pygame.display.update()
-main()
+ main()
