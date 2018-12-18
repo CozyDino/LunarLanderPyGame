@@ -88,7 +88,6 @@ class Niveau:
     def draw(self, window):
         for ligne in self.listeLigne:
             ligne.draw(window)
-    
 
 class Ligne:
     def __init__(self, ax, ay, bx, by):
