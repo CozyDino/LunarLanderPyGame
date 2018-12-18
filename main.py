@@ -35,10 +35,10 @@ class Fusee:
         self.angle = 0 # de 0 à 360 degré
         self.forceReacteur = 20
     def collide(self, ligne): # retourne booléen, paramètre ligne
-        lineH = new Ligne(self.x, self.y, self.x+self.largeur, self.y)
-        lineB = new Ligne(self.x, self.y-self.largeur, self.x+self.largeur, self.y-self.largeur)
-        lineG = new Ligne(self.x, self.y, self.x, self.y-self.largeur)
-        lineD = new Ligne(self.x+self.largeur, self.y, self.x+self.largeur, self.y-self.largeur)
+        lineH = Ligne(self.x, self.y, self.x+self.largeur, self.y)
+        lineB = Ligne(self.x, self.y-self.largeur, self.x+self.largeur, self.y-self.largeur)
+        lineG = Ligne(self.x, self.y, self.x, self.y-self.largeur)
+        lineD = Ligne(self.x+self.largeur, self.y, self.x+self.largeur, self.y-self.largeur)
         if ((lineH.intersection(ligne) == True) or (lineB.intersection(ligne) == True)
         or (lineG.intersection(ligne) == True) or (lineD.intersection(ligne) == True)):
             return True
