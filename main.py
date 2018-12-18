@@ -40,14 +40,27 @@ def main():
 class Fusee:
     def __init__(self):
         self.x = 0 # nombre à déterminer
-        self.y = 0 
+        self.y = 0
         self.vx = 0
         self.vy = 0.0
         self.largeur = 0
+<<<<<<< HEAD
         self.angle = 270 # de 0 à 360 degré
         self.forceReacteur = 0.004
+=======
+        self.angle = 0 # de 0 à 360 degré
+        self.forceReacteur = 20
+>>>>>>> f48af6edb16a178ac73f4371a6ad733c5f687496
     def collide(self, ligne): # retourne booléen, paramètre ligne
-        pass
+        lineH = Ligne(self.x, self.y, self.x+self.largeur, self.y)
+        lineB = Ligne(self.x, self.y-self.largeur, self.x+self.largeur, self.y-self.largeur)
+        lineG = Ligne(self.x, self.y, self.x, self.y-self.largeur)
+        lineD = Ligne(self.x+self.largeur, self.y, self.x+self.largeur, self.y-self.largeur)
+        if ((lineH.intersection(ligne) == True) or (lineB.intersection(ligne) == True)
+        or (lineG.intersection(ligne) == True) or (lineD.intersection(ligne) == True)):
+            return True
+        else:
+            return False
     def tourner(self, angle):
         self.angle = (self.angle + angle)%360
         # GameConfig.imgFusee = pygame.transform.rotate(GameConfig.imgFusee, angle)
@@ -66,6 +79,7 @@ class Fusee:
 
 class Niveau:
     def __init__(self):
+<<<<<<< HEAD
         self.listeLigne = []
         self.listeLigne.append(Ligne(0,600,300,500))
         self.listeLigne.append(Ligne(300,500,400,500))
@@ -81,6 +95,13 @@ class Niveau:
         for ligne in self.listeLigne:
             ligne.draw(window)
     
+=======
+        listeLigne = []
+        # liste.append(valeur) # permet d'ajouter une valeur à la liste,
+    def collide(fusee): # boolean
+        pass
+
+>>>>>>> f48af6edb16a178ac73f4371a6ad733c5f687496
 
 class Ligne:
     def __init__(self, ax, ay, bx, by):
