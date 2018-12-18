@@ -44,13 +44,8 @@ class Fusee:
         self.vx = 0
         self.vy = 0.0
         self.largeur = 0
-<<<<<<< HEAD
         self.angle = 270 # de 0 à 360 degré
         self.forceReacteur = 0.004
-=======
-        self.angle = 0 # de 0 à 360 degré
-        self.forceReacteur = 20
->>>>>>> f48af6edb16a178ac73f4371a6ad733c5f687496
     def collide(self, ligne): # retourne booléen, paramètre ligne
         lineH = Ligne(self.x, self.y, self.x+self.largeur, self.y)
         lineB = Ligne(self.x, self.y-self.largeur, self.x+self.largeur, self.y-self.largeur)
@@ -79,7 +74,6 @@ class Fusee:
 
 class Niveau:
     def __init__(self):
-<<<<<<< HEAD
         self.listeLigne = []
         self.listeLigne.append(Ligne(0,600,300,500))
         self.listeLigne.append(Ligne(300,500,400,500))
@@ -95,13 +89,6 @@ class Niveau:
         for ligne in self.listeLigne:
             ligne.draw(window)
     
-=======
-        listeLigne = []
-        # liste.append(valeur) # permet d'ajouter une valeur à la liste,
-    def collide(fusee): # boolean
-        pass
-
->>>>>>> f48af6edb16a178ac73f4371a6ad733c5f687496
 
 class Ligne:
     def __init__(self, ax, ay, bx, by):
