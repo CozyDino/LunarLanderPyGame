@@ -20,7 +20,7 @@ class GameState:
         self.fusee.draw(window)
     def isOver(self):
         if(self.niveau.collide(self.fusee)):
-            return True
+            return False
         else:
             return False
 
@@ -122,8 +122,8 @@ class Ligne:
     def pointSurSegment(self, x, y):
         """ print("X : ",x," Y : ",y)
         print("left :", y * (self.bx - self.ax), "right : ", (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax)) """
-        if((y * (self.bx - self.ax) <= (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax) + 0.1)
-        and (y * (self.bx - self.ax) >= (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax) - 0.1)):
+        if((y * (self.bx - self.ax) <= (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax) + 2)
+        and (y * (self.bx - self.ax) >= (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax) - 2)):
             """ print("Appartient à la droite ok")
             print("x : ",x," max x : ",max([self.ax, self.bx]))
             print("x : ",x," min x : ",min([self.ax, self.bx])) """

@@ -1,0 +1,6 @@
+Il y a un bug pour les collision avec la fusée lorsque la platform est horizontal, pourquoi ? Les raisons :
+    - Les lignes constituant la fusée sont horizontal et verticales, ce qui veut dire que d'une part, 
+    les lignes horizontales constiuant le bas et le haut du carré de la fusée ne collide pas avec la plateforme horizontale,
+     car ils sont le même coeff directeur, et donc que les deux droites sont parallèle 
+     d'autre part les autres ligne de la fusée pouvant collide sont les côté gauche et droite, OR, la fonction
+     rejette les cas de ligne verticales car elles ont un coeff directeur infini, donc la fonction ne traite pas ce cas
