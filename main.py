@@ -18,14 +18,11 @@ class GameState:
         window.fill(GameConfig.black)
         self.niveau.draw(window)
         self.fusee.draw(window)
-    def eventHandle(self, valeur):
-        print(pygame.K_UP)
-        if(valeur == pygame.K_UP):
-            self.fusee.propulser()
-        if(valeur == pygame.K_RIGHT):
-            self.fusee.tourner(2)
-        if(valeur == pygame.K_LEFT):
-            self.fusee.tourner(-2)
+    def isOver(self):
+        if(self.niveau.collide(self.fusee)):
+            return True
+        else:
+            return False
 
 
 def main():
@@ -43,14 +40,14 @@ class Fusee:
         self.y = 0
         self.vx = 0
         self.vy = 0.0
-        self.largeur = 0
+        self.largeur = 20
         self.angle = 270 # de 0 à 360 degré
         self.forceReacteur = 0.004
     def collide(self, ligne): # retourne booléen, paramètre ligne
         lineH = Ligne(self.x, self.y, self.x+self.largeur, self.y)
-        lineB = Ligne(self.x, self.y-self.largeur, self.x+self.largeur, self.y-self.largeur)
-        lineG = Ligne(self.x, self.y, self.x, self.y-self.largeur)
-        lineD = Ligne(self.x+self.largeur, self.y, self.x+self.largeur, self.y-self.largeur)
+        lineB = Ligne(self.x, self.y+self.largeur, self.x+self.largeur, self.y+self.largeur)
+        lineG = Ligne(self.x, self.y, self.x, self.y+self.largeur)
+        lineD = Ligne(self.x+self.largeur, self.y, self.x+self.largeur, self.y+self.largeur)
         if ((lineH.intersection(ligne) == True) or (lineB.intersection(ligne) == True)
         or (lineG.intersection(ligne) == True) or (lineD.intersection(ligne) == True)):
             return True
@@ -80,11 +77,11 @@ class Niveau:
         self.listeLigne.append(Ligne(400,500,600,550))
         self.listeLigne.append(Ligne(600,550,800,200))
         # liste.append(valeur) # permet d'ajouter une valeur à la liste, 
-    def collide(fusee): # boolean
+    def collide(self, fusee): # boolean
         for line in self.listeLigne:
-            if(fusee.collide(line) and line.gagnant == 0):
-                return true
-        return false
+            if(fusee.collide(line)):
+                return True
+        return False
     def draw(self, window):
         for ligne in self.listeLigne:
             ligne.draw(window)
@@ -96,11 +93,45 @@ class Ligne:
         self.bx = bx
         self.by = by
         self.gagnant = 0 # 0 = dangereux, 1 = gagnant
-    def intersection(self, ligne): # retourne booléen, paramètre ligne
-        x = 0 # coordonnée de l'intersection de deux droites
-        y = 0 # coordonnées y de l'intersection des deux droites
+    def intersection(self, ligne): # retourne booléen, paramètre ligne Attention ! Probleme collision axe horizontal
+        Ix = 0 # coordonnée de l'intersection de deux droites
+        Iy = 0 # coordonnées y de l'intersection des deux droites
+        if(self.bx - self.ax != 0):
+            coefDirecteur = ((self.by - self.ay)/(self.bx - self.ax))
+        else:
+            coefDirecteur = 100000
+        
+        ordonneOrigine = (self.ay - coefDirecteur* self.ax)
+
+        if(ligne.bx - ligne.ax != 0):
+            coefDirecteur2 = ((ligne.by - ligne.ay)/(ligne.bx - ligne.ax))
+        else:
+            coefDirecteur2 = 100000
+        if(coefDirecteur == coefDirecteur2):
+            return False
+        
+        ordonneOrigine2 = (ligne.ay - coefDirecteur2* ligne.ax)
+        Ix = ((ordonneOrigine2 - ordonneOrigine) / (coefDirecteur - coefDirecteur2))
+        Iy = (Ix* coefDirecteur + ordonneOrigine)
+        if(ligne.pointSurSegment(Ix,Iy) and self.pointSurSegment(Ix, Iy)):
+            print("chancla")
+            return True
+        else:
+            return False
+            
     def pointSurSegment(self, x, y):
-        return ((y - self.ay)*(self.bx - self.ax) == (self.by - self.ay)*(x-self.ax)) and (x >= self.ax and x <= self.bx) and (y >= self.ay, y <= self.by)
+        """ print("X : ",x," Y : ",y)
+        print("left :", y * (self.bx - self.ax), "right : ", (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax)) """
+        if((y * (self.bx - self.ax) <= (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax) + 0.1)
+        and (y * (self.bx - self.ax) >= (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax) - 0.1)):
+            """ print("Appartient à la droite ok")
+            print("x : ",x," max x : ",max([self.ax, self.bx]))
+            print("x : ",x," min x : ",min([self.ax, self.bx])) """
+            if((x <= max([self.ax, self.bx]) and x >= min([self.ax, self.bx]))
+            and (y <= max([self.ay, self.by]) and y >= min([self.ay, self.by]))):
+                #print("Appartient au segment ok")
+                return True
+        return False
     def setGagnant(self, v):
         self.gagant = v
     def draw(self, window):
@@ -143,6 +174,7 @@ def gameLoop(window, horloge):
         if(tournerGauche):
             gameState.fusee.tourner(-2)
         pygame.display.update()
+        game_over = gameState.isOver()
 
 def rot_center(image, angle):
     """rotate a Surface, maintaining position."""
@@ -152,4 +184,4 @@ def rot_center(image, angle):
     rot_sprite.get_rect().center = loc
     return rot_sprite
 
-main()
+
