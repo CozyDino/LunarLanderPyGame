@@ -96,23 +96,42 @@ class Ligne:
     def intersection(self, ligne): # retourne booléen, paramètre ligne Attention ! Probleme collision axe horizontal
         Ix = 0 # coordonnée de l'intersection de deux droites
         Iy = 0 # coordonnées y de l'intersection des deux droites
+        aVertical =  False
+        if(self.bx - self.ax == 0 and ligne.bx - ligne.ax == 0): # Ici, c'est lorsqu'on a deux ligne verticales, donc parallèle
+            return False
+
         if(self.bx - self.ax != 0):
             coefDirecteur = ((self.by - self.ay)/(self.bx - self.ax))
+            ordonneOrigine = (self.ay - coefDirecteur* self.ax)
         else:
-            coefDirecteur = 100000
+            coefDirecteur = float("inf")
+            ordonneOrigine = 0
+            aVertical = True
         
-        ordonneOrigine = (self.ay - coefDirecteur* self.ax)
-
         if(ligne.bx - ligne.ax != 0):
             coefDirecteur2 = ((ligne.by - ligne.ay)/(ligne.bx - ligne.ax))
+            ordonneOrigine2 = (ligne.ay - coefDirecteur2* ligne.ax)
         else:
-            coefDirecteur2 = 100000
+            coefDirecteur = float("inf")
+            ordonneOrigine = 0
+            aVertical = True
+        
         if(coefDirecteur == coefDirecteur2):
             return False
-        
-        ordonneOrigine2 = (ligne.ay - coefDirecteur2* ligne.ax)
-        Ix = ((ordonneOrigine2 - ordonneOrigine) / (coefDirecteur - coefDirecteur2))
-        Iy = (Ix* coefDirecteur + ordonneOrigine)
+
+
+        if(aVertical):
+            if(self.bx - self.ax == 0):
+                Ix = self.bx
+                Iy = (Ix* coefDirecteur2 + ordonneOrigine2)
+            else:
+                Ix = ligne.bx
+                Iy = (Ix* coefDirecteur + ordonneOrigine)
+        else:
+            Ix = ((ordonneOrigine2 - ordonneOrigine) / (coefDirecteur - coefDirecteur2))
+            Iy = (Ix* coefDirecteur + ordonneOrigine)
+
+        print("Ix : ", Ix," Iy : ", Iy)
         if(ligne.pointSurSegment(Ix,Iy) and self.pointSurSegment(Ix, Iy)):
             print("chancla")
             return True
@@ -122,8 +141,8 @@ class Ligne:
     def pointSurSegment(self, x, y):
         """ print("X : ",x," Y : ",y)
         print("left :", y * (self.bx - self.ax), "right : ", (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax)) """
-        if((y * (self.bx - self.ax) <= (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax) + 2)
-        and (y * (self.bx - self.ax) >= (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax) - 2)):
+        if((y * (self.bx - self.ax) <= (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax) + 0.5)
+        and (y * (self.bx - self.ax) >= (self.by-self.ay)*(x-self.bx)+ self.by * (self.bx-self.ax) - 0.5)):
             """ print("Appartient à la droite ok")
             print("x : ",x," max x : ",max([self.ax, self.bx]))
             print("x : ",x," min x : ",min([self.ax, self.bx])) """
@@ -174,6 +193,7 @@ def gameLoop(window, horloge):
         if(tournerGauche):
             gameState.fusee.tourner(-2)
         pygame.display.update()
+        print(1)
         game_over = gameState.isOver()
 
 def rot_center(image, angle):

@@ -9,7 +9,7 @@ line = main.Ligne(0,0,3,3)
 
 line2 = main.Ligne(0,1,3,0)
 
-line3 = main.Ligne(300,519,310,499)
+line3 = main.Ligne(90,50,120,70)
 
 if(line.pointSurSegment(2.4545,2.45454) and line.pointSurSegment(2,2) and not line.pointSurSegment(2.4545,2)):
     print("OK !")
@@ -32,7 +32,20 @@ if(line.intersection(line3)):
 if(line3.intersection(lineHorizontal)): # détermine les bonnes coordonnées d'intersection
     print("Collision ligne 1 et horizontal")
 
-lineBug = main.Ligne(300,500,400,500)
+lineVert = main.Ligne(100,0,100,500)
 
-if(line3.intersection(lineBug)):
-    print("collision good ")
+print("Inteserction  était bugée, mais maintenant la collide est bonne à partir de là, on doit trouver  IX : 100,  Iy : 56.67")
+if(lineVert.intersection(line3)):
+    print("Collide good")
+else:
+    print("BAD !")    
+
+print("Le boss final de la collision  :")
+
+lineHorizontal = main.Ligne(90,480,120,480)
+
+if(lineVert.intersection(lineHorizontal)):
+    print("Super collision")
+else:
+    print("Toujours pas")
+

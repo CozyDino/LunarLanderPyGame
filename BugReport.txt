@@ -4,3 +4,11 @@ Il y a un bug pour les collision avec la fusée lorsque la platform est horizont
      car ils sont le même coeff directeur, et donc que les deux droites sont parallèle 
      d'autre part les autres ligne de la fusée pouvant collide sont les côté gauche et droite, OR, la fonction
      rejette les cas de ligne verticales car elles ont un coeff directeur infini, donc la fonction ne traite pas ce cas
+
+     Après tentative ,les collision sembles meilleures entre elles, seul cas ou ça ne fonctionne pas, c'est lorsque
+     une ligne verticale rencontre une ligne horizontal, il faut corriger cela
+
+     J'ai enfin corrigé le bug, il s'agissait du coefficient directeur mis à 0 après qu'on a déterminier qu'il s'agissait
+     d'une ligne verticale, on souhaiterai mettre une valeur qui est impossible à atteindre, tel que l'infini
+
+     Le jeu est désormais jouable
