@@ -1,13 +1,18 @@
 import pygame
 import math
+import time
 
 class GameConfig:
     windowW = 800
     windowH = 600
     black = (188,42,58)
     white = (255,255,255)
+    green = (0,255,0)
     gravity = 0.001
+
+    pygame.font.init()
     imgFusee = pygame.image.load('rocketspritethumb.png')
+    fontFin = pygame.font.Font("BradBunR.ttf", 24)
 class GameState:
     def __init__(self):
         self.fusee = Fusee()
@@ -18,9 +23,14 @@ class GameState:
         window.fill(GameConfig.black)
         self.niveau.draw(window)
         self.fusee.draw(window)
-    def isOver(self):
-        if(self.niveau.collide(self.fusee)):
-            return False
+    def isOver(self, window):
+        LigneCollision = self.niveau.collide(self.fusee)
+        if(LigneCollision):
+            if(self.fusee.angle <= 270 + 20 and self.fusee.angle >= 270-20 and abs(self.fusee.vy) < 2 and LigneCollision.gagnant == 1):
+                displayMessage(window, "Gagné !", GameConfig.windowW/2, GameConfig.windowW/2)
+            else:
+                displayMessage(window, "Perdu !", GameConfig.windowW/2, GameConfig.windowW/2)
+            return True
         else:
             return False
 
@@ -66,6 +76,7 @@ class Fusee:
     def draw(self, window):
         imgFusee = rot_center(GameConfig.imgFusee, 270 - self.angle)
         window.blit(imgFusee, (self.x, self.y))
+        print(self.angle)
 
 
 
@@ -73,14 +84,16 @@ class Niveau:
     def __init__(self):
         self.listeLigne = []
         self.listeLigne.append(Ligne(0,600,300,500))
-        self.listeLigne.append(Ligne(300,500,400,500))
+        self.winLine = Ligne(300,500,400,500)
+        self.winLine.setGagnant(1)
+        self.listeLigne.append(self.winLine)
         self.listeLigne.append(Ligne(400,500,600,550))
         self.listeLigne.append(Ligne(600,550,800,200))
         # liste.append(valeur) # permet d'ajouter une valeur à la liste, 
     def collide(self, fusee): # boolean
         for line in self.listeLigne:
             if(fusee.collide(line)):
-                return True
+                return line
         return False
     def draw(self, window):
         for ligne in self.listeLigne:
@@ -131,9 +144,9 @@ class Ligne:
             Ix = ((ordonneOrigine2 - ordonneOrigine) / (coefDirecteur - coefDirecteur2))
             Iy = (Ix* coefDirecteur + ordonneOrigine)
 
-        print("Ix : ", Ix," Iy : ", Iy)
+        #print("Ix : ", Ix," Iy : ", Iy)
         if(ligne.pointSurSegment(Ix,Iy) and self.pointSurSegment(Ix, Iy)):
-            print("chancla")
+            #print("chancla")
             return True
         else:
             return False
@@ -152,9 +165,13 @@ class Ligne:
                 return True
         return False
     def setGagnant(self, v):
-        self.gagant = v
+        self.gagnant = v
     def draw(self, window):
-	    pygame.draw.line(window,GameConfig.white, (self.ax,self.ay), (self.bx, self.by),1)
+        if(self.gagnant == 0):
+            couleur = GameConfig.white
+        else:
+            couleur = GameConfig.green
+        pygame.draw.line(window,couleur, (self.ax,self.ay), (self.bx, self.by),1)
 
 
 
@@ -192,9 +209,12 @@ def gameLoop(window, horloge):
             gameState.fusee.tourner(2)
         if(tournerGauche):
             gameState.fusee.tourner(-2)
+        if(gameState.isOver(window)):
+            game_over = True
         pygame.display.update()
-        print(1)
-        game_over = gameState.isOver()
+    if(playAgain()):
+        main()
+        
 
 def rot_center(image, angle):
     """rotate a Surface, maintaining position."""
@@ -204,4 +224,18 @@ def rot_center(image, angle):
     rot_sprite.get_rect().center = loc
     return rot_sprite
 
+def playAgain():
+    time.sleep(2)
+    while True:
+        for event in pygame.event.get([pygame.KEYDOWN, pygame.QUIT]):
+            if event.type == pygame.QUIT:
+                return False
+            elif event.type == pygame.KEYDOWN:
+                return True
+        time.sleep(0.5)
 
+def displayMessage(window, text, x, y):
+    img = GameConfig.fontFin.render(text, True, GameConfig.white)
+    displayRect = img.get_rect()
+    displayRect.center = (x,y)
+    window.blit(img, displayRect)
