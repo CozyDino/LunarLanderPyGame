@@ -13,6 +13,7 @@ class GameConfig:
     pygame.font.init()
     imgFusee = pygame.image.load('rocketspritethumb.png')
     fontFin = pygame.font.Font("BradBunR.ttf", 24)
+    imageBackground = pygame.image.load('starbackground')
 class GameState:
     def __init__(self):
         self.fusee = Fusee()
@@ -20,7 +21,8 @@ class GameState:
     def advanceState(self):
         self.fusee.update()
     def draw(self, window):
-        window.fill(GameConfig.black)
+        # window.fill(GameConfig.black)
+        window.blit(GameConfig.imageBackground, (0,0))
         self.niveau.draw(window)
         self.fusee.draw(window)
     def isOver(self, window):
