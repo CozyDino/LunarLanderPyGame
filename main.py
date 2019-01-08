@@ -25,6 +25,7 @@ class GameState:
         window.blit(GameConfig.imageBackground, (0,0))
         self.niveau.draw(window)
         self.fusee.draw(window)
+        getIACommand(self)
     def isOver(self, window):
         LigneCollision = self.niveau.collide(self.fusee)
         if(LigneCollision):
@@ -57,7 +58,7 @@ class Fusee:
         self.forceReacteur = 0.004
     def collide(self, ligne): # retourne booléen, paramètre ligne
         lineH = Ligne(self.x, self.y, self.x+self.largeur, self.y)
-        lineB = Ligne(self.x, self.y+self.largeur, self.x+self.largeur, self.y+self.largeur)
+        lineB = Ligne(self.x, self.y+self.largeur, self.x+self.largeur, self.y + self.largeur)
         lineG = Ligne(self.x, self.y, self.x, self.y+self.largeur)
         lineD = Ligne(self.x+self.largeur, self.y, self.x+self.largeur, self.y+self.largeur)
         if ((lineH.intersection(ligne) == True) or (lineB.intersection(ligne) == True)
@@ -78,7 +79,8 @@ class Fusee:
     def draw(self, window):
         imgFusee = rot_center(GameConfig.imgFusee, 270 - self.angle)
         window.blit(imgFusee, (self.x, self.y))
-        print(self.angle)
+        #print(self.angle)
+        print("Vitesse courante en X : ", self.vx)
 
 
 
@@ -182,6 +184,7 @@ def gameLoop(window, horloge):
     propulser = False
     tournerGauche = False
     tournerDroite = False
+    IA = True
     gameState = GameState()
     while not game_over:
         gameState.advanceState()
@@ -205,6 +208,21 @@ def gameLoop(window, horloge):
             if event.type == pygame.KEYUP and event.key == pygame.K_RIGHT:
                 tournerDroite = False
         
+        if(IA):
+            if(getIACommand(gameState) == "droite"):
+                propulser = False
+                tournerGauche = False
+                tournerDroite = True
+            elif(getIACommand(gameState) == "gauche"):
+                tournerGauche = True
+                propulse = False
+                tournerDroite = False
+            elif(getIACommand(gameState) == "propulse"):
+                propulser = True
+                tournerGauche = False
+                tournerDroite = False
+
+
         if(propulser):
             gameState.fusee.propulser() 
         if(tournerDroite):
@@ -241,3 +259,25 @@ def displayMessage(window, text, x, y):
     displayRect = img.get_rect()
     displayRect.center = (x,y)
     window.blit(img, displayRect)
+
+
+def getIACommand(GameState): 
+    Ox = (GameState.niveau.winLine.ax + GameState.niveau.winLine.bx)/2
+    Oy = (GameState.niveau.winLine.ay + GameState.niveau.winLine.by)/2 # Le point O représente le point à atteindre
+    vitesseAAtteindre = (Ox - GameState.fusee.x) / ((-GameState.fusee.vy + math.sqrt(math.pow(GameState.fusee.vy, 2 ) - 2 * (GameState.fusee.y - Oy) * GameConfig.gravity)) / GameConfig.gravity)
+    print("vitesse à atteindre en X : ",vitesseAAtteindre)
+    if((vitesseAAtteindre >= GameState.fusee.vx - 0.01 and vitesseAAtteindre <= GameState.fusee.vx + 0.01) or abs(GameState.fusee.y - Oy) < 30):
+        if(GameState.fusee.angle > 270 and GameState.fusee.angle < 360 or GameState.fusee.angle == 0):
+            return "gauche"
+        if(GameState.fusee.angle > 180 and GameState.fusee.angle < 270):
+            return "droite"
+    
+    if(vitesseAAtteindre > GameState.fusee.vx and GameState.fusee.angle != 0):
+        return "droite"
+    
+    if(vitesseAAtteindre > GameState.fusee.vx and GameState.fusee.angle == 0):
+        return "propulse"
+    if(vitesseAAtteindre < GameState.fusee.vx and GameState.fusee.angle == 180):
+        return "propulse"
+    if(vitesseAAtteindre < GameState.fusee.vx and GameState.fusee.angle != 180):
+        return "gauche"
